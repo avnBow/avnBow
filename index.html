@@ -216,11 +216,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // ===== Preloader typing =====
   const codeEl = document.getElementById("code");
-  const preloader = document.getElementById("preloader");
-  const main = document.querySelector(".container");
+const preloader = document.getElementById("preloader");
+const main = document.querySelector(".container");
 
-  if (codeEl && preloader && main) {
-    const codeText = `<html lang="en">
+const codeText = `<html lang="en">
 \t<head>
 \t\t<title>Hey its me Bow</title>
 \t</head>
@@ -230,23 +229,23 @@ window.addEventListener("DOMContentLoaded", () => {
 \t</body>
 </html>`;
 
-    let i = 0;
-    function typeCode() {
-      if (i < codeText.length) {
-        codeEl.textContent += codeText[i];
-        i++;
-        setTimeout(typeCode, 40);
-        codeEl.scrollTop = codeEl.scrollHeight; // scroll otomatis jika panjang
-      } else {
-        setTimeout(() => {
-          preloader.style.opacity = 0;
-          main.style.opacity = 1;
-          setTimeout(() => preloader.remove(), 1000);
-        }, 800);
-      }
-    }
-    typeCode();
+let i = 0;
+function typeCode() {
+  if (i < codeText.length) {
+    codeEl.textContent += codeText[i];
+    i++;
+    setTimeout(typeCode, 40);
+    codeEl.scrollTop = codeEl.scrollHeight;
+  } else {
+    setTimeout(() => {
+      preloader.style.opacity = 0;
+      main.style.opacity = 1;
+      main.style.pointerEvents = "auto";
+      setTimeout(() => preloader.remove(), 1000);
+    }, 800);
   }
+}
+typeCode();
 });
 </script>
 </html>
