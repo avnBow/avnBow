@@ -19,6 +19,9 @@
   </head>
 
   <body>
+    <div id="preloader">
+      <pre id="code"></pre>
+    </div>
     <div class="container">
       <!-- HERO -->
       <section class="hero">
@@ -30,7 +33,7 @@
           </small>
           <h1>
             Hey, I'm Bowo,<br />
-           <span> A Fullstack </span><br />
+            <span> A Fullstack </span><br />
             Developer
           </h1>
           <p>
@@ -51,16 +54,16 @@
           <img src="img.png" alt="profile" />
         </div>
 
-<div class="stats">
-  <div>
-    <strong id="exp">0+</strong><br />
-    Years Experience
-  </div>
-  <div>
-    <strong id="contributions">Loading...</strong><br />
-    Contributions in the last year
-  </div>
-</div>
+        <div class="stats">
+          <div>
+            <strong id="exp">0+</strong><br />
+            Years Experience
+          </div>
+          <div>
+            <strong id="contributions">Loading...</strong><br />
+            Contributions in the last year
+          </div>
+        </div>
       </section>
 
       <section class="features">
@@ -104,8 +107,9 @@
         </div>
         <div>
           <p>
-            Hey, I'm <strong>Bowo</strong>, a Fullstack Developer. I’m passionate about building efficient,
-            scalable, and user-friendly web applications. <br /><br />
+            Hey, I'm <strong>Bowo</strong>, a Fullstack Developer. I’m
+            passionate about building efficient, scalable, and user-friendly web
+            applications. <br /><br />
             I enjoy turning ideas into real applications—writing clean code,
             building solid systems, and making things actually work.
           </p>
@@ -117,53 +121,129 @@
         <h2>Portfolio</h2>
         <img src="" alt="portfolio" />
       </section> -->
-
-      
     </div>
   </body>
   <script>
-      // ===== YEARS EXPERIENCE =====
-      const startYear = 2025;
-      const currentYear = new Date().getFullYear();
-      const exp = Math.max(1, currentYear - startYear);
-      document.getElementById("exp").innerText = exp + "+";
+    // ===== YEARS EXPERIENCE =====
+    const startYear = 2025;
+    const currentYear = new Date().getFullYear();
+    const exp = Math.max(1, currentYear - startYear);
+    document.getElementById("exp").innerText = exp + "+";
 
-      // ===== GITHUB REPO COUNT =====
-      const username = "avnBow";
+    // ===== GITHUB REPO COUNT =====
+    const username = "avnBow";
 
-      fetch(`https://api.github.com/users/${username}`)
-        .then((res) => res.json())
-        .then((data) => {
-          document.getElementById("repo").innerText = data.public_repos + "+";
-        })
-        .catch(() => {
-          document.getElementById("repo").innerText = "??";
+    fetch(`https://api.github.com/users/${username}`)
+      .then((res) => res.json())
+      .then((data) => {
+        document.getElementById("repo").innerText = data.public_repos + "+";
+      })
+      .catch(() => {
+        document.getElementById("repo").innerText = "??";
+      });
+
+    // ===== GITHUB CONTRIBUTIONS =====
+    async function getGithubContributions() {
+      try {
+        const res = await fetch(
+          `https://api.github.com/users/${username}/events/public`,
+        );
+        const events = await res.json();
+
+        const now = new Date();
+        const oneYearAgo = new Date();
+        oneYearAgo.setFullYear(now.getFullYear() - 1);
+
+        let contributions = 0;
+        events.forEach((event) => {
+          const eventDate = new Date(event.created_at);
+          if (eventDate > oneYearAgo) contributions++;
         });
 
-      // ===== GITHUB CONTRIBUTIONS =====
-      async function getGithubContributions() {
-        try {
-          const res = await fetch(`https://api.github.com/users/${username}/events/public`);
-          const events = await res.json();
+        document.getElementById("contributions").innerText = `${contributions}`;
+      } catch (err) {
+        document.getElementById("contributions").innerText =
+          "Error loading contributions";
+        console.error(err);
+      }
+    }
 
-          const now = new Date();
-          const oneYearAgo = new Date();
-          oneYearAgo.setFullYear(now.getFullYear() - 1);
+    getGithubContributions();
 
-          let contributions = 0;
-          events.forEach(event => {
-            const eventDate = new Date(event.created_at);
-            if (eventDate > oneYearAgo) contributions++;
-          });
+    // ===== Count-up animasi untuk stats =====
+    function animateCount(id, target) {
+      let current = 0;
+      const increment = target / 100;
+      const interval = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(interval);
+        }
+        document.getElementById(id).innerText =
+          Math.floor(current) + (id === "exp" ? "+" : "");
+      }, 15);
+    }
 
-          document.getElementById("contributions").innerText = `${contributions}`;
-        } catch (err) {
-          document.getElementById("contributions").innerText = "Error loading contributions";
-          console.error(err);
+    animateCount("exp", exp);
+    getGithubContributions().then(() => {
+      const contrib =
+        parseInt(document.getElementById("contributions").innerText) || 0;
+      animateCount("contributions", contrib);
+    });
+
+    // ===== Scroll reveal untuk sections =====
+    const sections = document.querySelectorAll("section");
+    function revealOnScroll() {
+      const triggerBottom = window.innerHeight * 0.85;
+      sections.forEach((section) => {
+        const top = section.getBoundingClientRect().top;
+        if (top < triggerBottom) {
+          section.classList.add("show");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", revealOnScroll);
+    window.addEventListener("load", revealOnScroll);
+
+    // ===== Fade-up hero =====
+    document.querySelector(".hero-text").classList.add("fade-up");
+    document.querySelector(".profile").classList.add("fade-up");
+
+    window.addEventListener("load", () => {
+      const codeEl = document.getElementById("code");
+      const preloader = document.getElementById("preloader");
+      const main = document.querySelector(".container");
+
+      const codeText = `<html lang="en">
+\t<head>
+\t\t<title>Hey its me Bow</title>
+\t</head>
+\t<body>
+\t\t<h2>Hi, Bow here</h2>
+\t\t<p>let me introduce myself</p>
+\t</body>
+</html>`;
+
+      let i = 0;
+
+      function typeCode() {
+        if (i < codeText.length) {
+          codeEl.textContent += codeText[i];
+          i++;
+          setTimeout(typeCode, 40);
+          codeEl.scrollTop = codeEl.scrollHeight; // scroll otomatis jika panjang
+        } else {
+          setTimeout(() => {
+            preloader.style.opacity = 0;
+            main.style.opacity = 1;
+            setTimeout(() => preloader.remove(), 1000);
+          }, 800);
         }
       }
 
-      getGithubContributions();
-    </script>
-
+      typeCode();
+    });
+  </script>
 </html>

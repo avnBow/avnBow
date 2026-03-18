@@ -1,3 +1,43 @@
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  color: rgb(255, 255, 255); /* hijau terminal */
+  font-family: monospace;
+  font-size: 24px; /* lebih besar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  padding: 20px;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+#preloader pre {
+  margin: 0;
+  white-space: pre-wrap;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+      .container {
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+
+      /* optional scrollbar */
+      #preloader pre::-webkit-scrollbar {
+        width: 6px;
+      }
+      #preloader pre::-webkit-scrollbar-thumb {
+        background: rgb(255, 255, 255);
+        border-radius: 3px;
+      }
 * {
   margin: 0;
   padding: 0;
@@ -279,5 +319,73 @@ body {
   .timeline-item small {
     color: #555;
     font-size: 14px;
+  }
+
+  /* ===== Animasi dasar ===== */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-up {
+    animation: fadeUp 1s ease forwards;
+    opacity: 0; /* mulai transparan */
+  }
+
+  /* Hover button efek */
+  .btn {
+    transition:
+      transform 0.3s ease,
+      background 0.3s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-5px);
+    background: #333;
+  }
+
+  /* Hero Image float */
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .profile img {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  /* Feature cards hover */
+  .features div {
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .features div:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Section muncul saat scroll */
+  section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+  }
+
+  section.show {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
