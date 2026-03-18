@@ -123,100 +123,104 @@
       </section> -->
     </div>
   </body>
-  <script>
-    // ===== YEARS EXPERIENCE =====
-    const startYear = 2025;
-    const currentYear = new Date().getFullYear();
-    const exp = Math.max(1, currentYear - startYear);
-    document.getElementById("exp").innerText = exp + "+";
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  // ===== YEARS EXPERIENCE =====
+  const startYear = 2025;
+  const currentYear = new Date().getFullYear();
+  const exp = Math.max(1, currentYear - startYear);
+  const expEl = document.getElementById("exp");
+  if (expEl) expEl.innerText = exp + "+";
 
-    // ===== GITHUB REPO COUNT =====
-    const username = "avnBow";
-
+  // ===== GITHUB REPO COUNT =====
+  const username = "avnBow";
+  const repoEl = document.getElementById("repo");
+  if (repoEl) {
     fetch(`https://api.github.com/users/${username}`)
       .then((res) => res.json())
       .then((data) => {
-        document.getElementById("repo").innerText = data.public_repos + "+";
+        repoEl.innerText = data.public_repos + "+";
       })
       .catch(() => {
-        document.getElementById("repo").innerText = "??";
+        repoEl.innerText = "??";
+      });
+  }
+
+  // ===== GITHUB CONTRIBUTIONS =====
+  const contribEl = document.getElementById("contributions");
+  async function getGithubContributions() {
+    if (!contribEl) return;
+    try {
+      const res = await fetch(`https://api.github.com/users/${username}/events/public`);
+      const events = await res.json();
+
+      const now = new Date();
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(now.getFullYear() - 1);
+
+      let contributions = 0;
+      events.forEach((event) => {
+        const eventDate = new Date(event.created_at);
+        if (eventDate > oneYearAgo) contributions++;
       });
 
-    // ===== GITHUB CONTRIBUTIONS =====
-    async function getGithubContributions() {
-      try {
-        const res = await fetch(
-          `https://api.github.com/users/${username}/events/public`,
-        );
-        const events = await res.json();
+      contribEl.innerText = contributions;
+    } catch (err) {
+      contribEl.innerText = "Error loading contributions";
+      console.error(err);
+    }
+  }
 
-        const now = new Date();
-        const oneYearAgo = new Date();
-        oneYearAgo.setFullYear(now.getFullYear() - 1);
+  getGithubContributions();
 
-        let contributions = 0;
-        events.forEach((event) => {
-          const eventDate = new Date(event.created_at);
-          if (eventDate > oneYearAgo) contributions++;
-        });
-
-        document.getElementById("contributions").innerText = `${contributions}`;
-      } catch (err) {
-        document.getElementById("contributions").innerText =
-          "Error loading contributions";
-        console.error(err);
+  // ===== Count-up animasi untuk stats =====
+  function animateCount(id, target) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    let current = 0;
+    const increment = target / 100;
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        current = target;
+        clearInterval(interval);
       }
-    }
+      el.innerText = Math.floor(current) + (id === "exp" ? "+" : "");
+    }, 15);
+  }
 
-    getGithubContributions();
+  animateCount("exp", exp);
+  getGithubContributions().then(() => {
+    const contrib = parseInt(contribEl?.innerText || 0) || 0;
+    animateCount("contributions", contrib);
+  });
 
-    // ===== Count-up animasi untuk stats =====
-    function animateCount(id, target) {
-      let current = 0;
-      const increment = target / 100;
-      const interval = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          current = target;
-          clearInterval(interval);
-        }
-        document.getElementById(id).innerText =
-          Math.floor(current) + (id === "exp" ? "+" : "");
-      }, 15);
-    }
-
-    animateCount("exp", exp);
-    getGithubContributions().then(() => {
-      const contrib =
-        parseInt(document.getElementById("contributions").innerText) || 0;
-      animateCount("contributions", contrib);
+  // ===== Scroll reveal untuk sections =====
+  const sections = document.querySelectorAll("section");
+  function revealOnScroll() {
+    const triggerBottom = window.innerHeight * 0.85;
+    sections.forEach((section) => {
+      const top = section.getBoundingClientRect().top;
+      if (top < triggerBottom) {
+        section.classList.add("show");
+      }
     });
+  }
 
-    // ===== Scroll reveal untuk sections =====
-    const sections = document.querySelectorAll("section");
-    function revealOnScroll() {
-      const triggerBottom = window.innerHeight * 0.85;
-      sections.forEach((section) => {
-        const top = section.getBoundingClientRect().top;
-        if (top < triggerBottom) {
-          section.classList.add("show");
-        }
-      });
-    }
+  window.addEventListener("scroll", revealOnScroll);
+  window.addEventListener("load", revealOnScroll);
 
-    window.addEventListener("scroll", revealOnScroll);
-    window.addEventListener("load", revealOnScroll);
+  // ===== Fade-up hero =====
+  document.querySelector(".hero-text")?.classList.add("fade-up");
+  document.querySelector(".profile")?.classList.add("fade-up");
 
-    // ===== Fade-up hero =====
-    document.querySelector(".hero-text").classList.add("fade-up");
-    document.querySelector(".profile").classList.add("fade-up");
+  // ===== Preloader typing =====
+  const codeEl = document.getElementById("code");
+  const preloader = document.getElementById("preloader");
+  const main = document.querySelector(".container");
 
-    window.addEventListener("load", () => {
-      const codeEl = document.getElementById("code");
-      const preloader = document.getElementById("preloader");
-      const main = document.querySelector(".container");
-
-      const codeText = `<html lang="en">
+  if (codeEl && preloader && main) {
+    const codeText = `<html lang="en">
 \t<head>
 \t\t<title>Hey its me Bow</title>
 \t</head>
@@ -226,24 +230,23 @@
 \t</body>
 </html>`;
 
-      let i = 0;
-
-      function typeCode() {
-        if (i < codeText.length) {
-          codeEl.textContent += codeText[i];
-          i++;
-          setTimeout(typeCode, 40);
-          codeEl.scrollTop = codeEl.scrollHeight; // scroll otomatis jika panjang
-        } else {
-          setTimeout(() => {
-            preloader.style.opacity = 0;
-            main.style.opacity = 1;
-            setTimeout(() => preloader.remove(), 1000);
-          }, 800);
-        }
+    let i = 0;
+    function typeCode() {
+      if (i < codeText.length) {
+        codeEl.textContent += codeText[i];
+        i++;
+        setTimeout(typeCode, 40);
+        codeEl.scrollTop = codeEl.scrollHeight; // scroll otomatis jika panjang
+      } else {
+        setTimeout(() => {
+          preloader.style.opacity = 0;
+          main.style.opacity = 1;
+          setTimeout(() => preloader.remove(), 1000);
+        }, 800);
       }
-
-      typeCode();
-    });
-  </script>
+    }
+    typeCode();
+  }
+});
+</script>
 </html>
