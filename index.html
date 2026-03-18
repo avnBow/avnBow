@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hey its me Bow</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- LINK CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-text">
+          <small class="brand">
+            <a href="https://github.com/avnBow" target="_blank">
+              <i class="fa-brands fa-github"></i> avnBow
+            </a>
+          </small>
+          <h1>
+            Hey, I'm Bowo,<br />
+           <span> A Fullstack </span><br />
+            Developer
+          </h1>
+          <p>
+            Building scalable web applications with clean architecture and
+            modern UI. From backend logic to frontend experience, I create
+            digital products that are fast, efficient, and user-friendly.
+          </p>
+          <a
+            href="https://wa.me/628992116076"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn"
+          >
+            Contact Me
+          </a>
+        </div>
+        <div class="profile">
+          <img src="img.png" alt="profile" />
+        </div>
+
+<div class="stats">
+  <div>
+    <strong id="exp">0+</strong><br />
+    Years Experience
+  </div>
+  <div>
+    <strong id="contributions">Loading...</strong><br />
+    Contributions in the last year
+  </div>
+</div>
+      </section>
+
+      <section class="features">
+        <div>
+          <h2>Backend Systems</h2>
+          <p>Clean architecture and scalable applications.</p>
+        </div>
+
+        <div>
+          <h2>Frontend UI</h2>
+          <p>Interactive and modern interfaces.</p>
+        </div>
+
+        <div>
+          <h2>API & Integration</h2>
+          <p>Efficient REST APIs and seamless system connections.</p>
+        </div>
+
+        <div>
+          <h2>Performance</h2>
+          <p>Fast, optimized, and responsive web apps.</p>
+        </div>
+      </section>
+
+      <!-- TRUSTED -->
+      <!-- <section class="trusted">
+        <h3>Trusted By</h3>
+        <div class="logos">
+          <div>Frame Blox</div>
+          <div>Supa Blox</div>
+          <div>Hype Blox</div>
+          <div>Ultra Blox</div>
+        </div>
+      </section> -->
+
+      <!-- ABOUT -->
+      <section class="about">
+        <div>
+          <h2>Building Scalable Systems & Modern Web Experiences</h2>
+          <small class="tagline">Make it work, then make it better.</small>
+        </div>
+        <div>
+          <p>
+            Hey, I'm <strong>Bowo</strong>, a Fullstack Developer. I’m passionate about building efficient,
+            scalable, and user-friendly web applications. <br /><br />
+            I enjoy turning ideas into real applications—writing clean code,
+            building solid systems, and making things actually work.
+          </p>
+        </div>
+      </section>
+
+      <!-- PORTFOLIO -->
+      <!-- <section class="portfolio">
+        <h2>Portfolio</h2>
+        <img src="" alt="portfolio" />
+      </section> -->
+
+      
+    </div>
+  </body>
+  <script>
+      // ===== YEARS EXPERIENCE =====
+      const startYear = 2025;
+      const currentYear = new Date().getFullYear();
+      const exp = Math.max(1, currentYear - startYear);
+      document.getElementById("exp").innerText = exp + "+";
+
+      // ===== GITHUB REPO COUNT =====
+      const username = "avnBow";
+
+      fetch(`https://api.github.com/users/${username}`)
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("repo").innerText = data.public_repos + "+";
+        })
+        .catch(() => {
+          document.getElementById("repo").innerText = "??";
+        });
+
+      // ===== GITHUB CONTRIBUTIONS =====
+      async function getGithubContributions() {
+        try {
+          const res = await fetch(`https://api.github.com/users/${username}/events/public`);
+          const events = await res.json();
+
+          const now = new Date();
+          const oneYearAgo = new Date();
+          oneYearAgo.setFullYear(now.getFullYear() - 1);
+
+          let contributions = 0;
+          events.forEach(event => {
+            const eventDate = new Date(event.created_at);
+            if (eventDate > oneYearAgo) contributions++;
+          });
+
+          document.getElementById("contributions").innerText = `${contributions}`;
+        } catch (err) {
+          document.getElementById("contributions").innerText = "Error loading contributions";
+          console.error(err);
+        }
+      }
+
+      getGithubContributions();
+    </script>
+
+</html>
