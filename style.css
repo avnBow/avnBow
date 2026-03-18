@@ -1,3 +1,46 @@
+html {
+  scroll-behavior: smooth;
+}
+
+section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 30px;
+  background: #111; /* default hitam */
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Icon & text */
+.whatsapp-btn i {
+  transition: transform 0.3s ease;
+}
+
+/* Hover efek: slide kanan + hijau */
+.whatsapp-btn:hover {
+  background: #25D366; /* hijau WhatsApp */
+  transform: translateX(5px); /* tombol geser sedikit kanan */
+}
+
+.whatsapp-btn:hover i {
+  transform: translateX(3px); /* icon ikut geser */
+}
 #preloader {
   position: fixed;
   top: 0;
@@ -42,19 +85,19 @@
   border-radius: 3px;
 }
 
-      .container {
-        opacity: 0;
-        transition: opacity 1s ease;
-      }
+.container {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
 
-      /* optional scrollbar */
-      #preloader pre::-webkit-scrollbar {
-        width: 6px;
-      }
-      #preloader pre::-webkit-scrollbar-thumb {
-        background: rgb(255, 255, 255);
-        border-radius: 3px;
-      }
+/* optional scrollbar */
+#preloader pre::-webkit-scrollbar {
+  width: 6px;
+}
+#preloader pre::-webkit-scrollbar-thumb {
+  background: rgb(255, 255, 255);
+  border-radius: 3px;
+}
 * {
   margin: 0;
   padding: 0;
