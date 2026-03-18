@@ -1,3 +1,4 @@
+/* ===== PRELOADER ===== */
 #preloader {
   position: fixed;
   top: 0;
@@ -5,9 +6,9 @@
   width: 100%;
   height: 100%;
   background: #111;
-  color: rgb(255, 255, 255); /* hijau terminal */
+  color: #fff; /* putih terminal */
   font-family: monospace;
-  font-size: 24px; /* lebih besar */
+  font-size: 32px; /* lebih besar */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,6 +24,21 @@
   white-space: pre-wrap;
   max-height: 80vh;
   overflow-y: auto;
+}
+
+/* optional scrollbar */
+#preloader pre::-webkit-scrollbar {
+  width: 6px;
+}
+#preloader pre::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 3px;
+}
+
+/* Konten utama awalnya tersembunyi */
+.container {
+  opacity: 0;
+  transition: opacity 1s ease;
 }
 
       .container {
